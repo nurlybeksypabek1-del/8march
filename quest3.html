@@ -247,13 +247,29 @@ document.getElementById("puzzleScreen").classList.add("active");
 document.getElementById("puzzleText").innerText = puzzles[0].hint;
 }
 function checkPuzzle(){
-let answer = document.getElementById("puzzleInput").value.toLowerCase();
-if(answer===puzzles[0].word){
-alert("Правильно! Цифра: "+puzzles[0].num);
-code+=puzzles[0].num;
-document.getElementById("puzzleScreen").classList.remove("active");
-document.getElementById("codeScreen").classList.add("active");
-}else{ alert("Попробуй ещё!"); }
+    let answer = document.getElementById("puzzleInput").value.toLowerCase().trim();
+    
+    // заменяем латинские буквы на русские
+    answer = answer.replace(/a/g,'а')
+                   .replace(/b/g,'в')
+                   .replace(/e/g,'е')
+                   .replace(/k/g,'к')
+                   .replace(/m/g,'м')
+                   .replace(/o/g,'о')
+                   .replace(/p/g,'р')
+                   .replace(/c/g,'с')
+                   .replace(/t/g,'т')
+                   .replace(/y/g,'у')
+                   .replace(/x/g,'х');
+
+    if(answer === puzzles[0].word){
+        alert("Правильно! Цифра: "+puzzles[0].num);
+        code += puzzles[0].num;
+        document.getElementById("puzzleScreen").classList.remove("active");
+        document.getElementById("codeScreen").classList.add("active");
+    } else {
+        alert("Попробуй ещё!");
+    }
 }
 
 // ===================== ПРОВЕРКА КОДА =====================
@@ -298,6 +314,7 @@ setTimeout(()=>h.remove(),dur+50);
 </body>
 
 </html>
+
 
 
 
