@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>8 March Quest 3.0</title>
+<style>
+/* ========== ФОН САЙТА ========= */
+body{
+  background: linear-gradient(135deg,#ffecd2,#fcb69f);
+  color:#1e293b;
+  font-family: Arial;
+  text-align:center;
+  padding:30px;
+  overflow:hidden;
+}
+
+/* Кнопки */
+button{
+  padding:12px 20px;
+  margin:10px;
+  font-size:16px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+/* Экраны */
+.screen{ display:none; }
+.active{ display:block; }
+
+/* Поля ввода */
+input{
+  padding:10px;
+  font-size:18px;
+  text-align:center;
+}
+
+/* Терминал */
+#terminal{
+  font-family: monospace;
+  font-size:18px;
+  background:#0f172a;
+  color:#22c55e;
+  padding:20px;
+  border-radius:10px;
+  min-height:150px;
+  text-align:left;
+  margin-bottom:20px;
+  white-space: pre-wrap;
+}
+
+/* Падающие сердца и цветы */
+.heart,.flower{
+  position:absolute;
+  font-size:30px;
+  pointer-events:none;
+}
+
+/* Сердце для мини игры */
+#gameHeart{
+  font-size:40px;
+  cursor:pointer;
+  position:absolute;
+}
+
+/* Конфетти */
+.confetti{
+  position:fixed;
+  width:10px;
+  height:10px;
+  background: #ff0000;
+  pointer-events:none;
+  animation:fall linear infinite;
+  opacity:0.9;
+}
+
+@keyframes fall{
+  0%{transform: translateY(0); opacity:1;}
+  100%{transform: translateY(100vh); opacity:0;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== МУЗЫКА ===================== -->
+<audio id="bgMusic" loop>
+<source src="https://www.bensound.com/bensound-music/bensound-sunny.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ===================== СТАРТ ТЕРМИНАЛ ===================== -->
+<div id="start" class="screen active">
+<h1>🌷 8 March Quest 🌷</h1>
+<div id="terminal"></div>
+<button id="startBtn" style="display:none" onclick="startQuestions()">Начать миссию</button>
+</div>
+
+<!-- ===================== ВОПРОСЫ ===================== -->
+<div id="qScreen" class="screen">
+<h2>Вопрос <span id="qNumber">1</span></h2>
+<p id="questionText"></p>
+<button onclick="answer(true)">True</button>
+<button onclick="answer(false)">False</button>
+</div>
+
+<!-- ===================== МИНИ ИГРА ===================== -->
+<div id="gameScreen" class="screen">
+<h2>Мини-игра: Поймай сердце ❤️</h2>
+<p>Нажми на сердце!</p>
+<div id="gameHeart">❤️</div>
+</div>
+
+<!-- ===================== ГОЛОВОЛОМКА ===================== -->
+<div id="puzzleScreen" class="screen">
+<h2>Собери слово:</h2>
+<p id="puzzleText"></p>
+<input id="puzzleInput" placeholder="введите слово">
+<br>
+<button onclick="checkPuzzle()">Проверить</button>
+</div>
+
+<!-- ===================== ВВОД КОДА ===================== -->
+<div id="codeScreen" class="screen">
+<h2>Введите код, чтобы открыть открытку</h2>
+<input id="finalCode" placeholder="цифры">
+<br>
+<button onclick="checkCode()">Открыть</button>
+</div>
+
+<!-- ===================== ФИНАЛЬНАЯ ОТКРЫТКА ===================== -->
+<div id="finalScreen" class="screen">
+<h1>🌷 С 8 марта, Айлин! 🌷</h1>
+<p>
+Этот квест был сделан специально для тебя.<br><br>
+Ты очень ценная и замечательная девушка.<br>
+С тобой всегда весело и приятно общаться.<br>
+Спасибо, что ты есть! 🌸
+</p>
+</div>
+
+<script>
+// ===================== НАСТРОЙКИ =====================
+let code = ""; 
+let questionIndex = 0;
+
+// вопросы True/False
+const questions = [
+{q:"Айлин – одна из самых добрых людей, которых я знаю.", a:true, num:3},
+{q:"Айлин умеет всегда заставлять меня улыбаться.", a:true, num:5},
+{q:"Нурлыбек думает, что Айлин никогда не шутит.", a:false, num:2},
+{q:"Айлин – супер классная, правда!", a:true, num:4},
+{q:"Айлин любит приключения и игры.", a:true, num:1}
+];
+
+// головоломки
+const puzzles = [
+{word:"айлин", num:2, hint:"Собери имя"}
+];
+
+// тексты терминала
+const terminalTexts = [
+"Запуск поздравления...",
+"Подключение к серверу хорошего настроения...",
+"Проверка уровня доброты...",
+"Система обнаружила Айлин...",
+"Подготовка сюрприза..."
+];
+
+// ===================== АНИМАЦИЯ ТЕРМИНАЛА =====================
+const terminal = document.getElementById("terminal");
+const startBtn = document.getElementById("startBtn");
+
+function typeTerminal(index=0){
+  if(index<terminalTexts.length){
+    let i=0;
+    let txt = terminalTexts[index];
+    let interval = setInterval(()=>{
+      terminal.innerHTML += txt[i];
+      i++;
+      if(i>=txt.length){ 
+        terminal.innerHTML += "\n";
+        clearInterval(interval);
+        setTimeout(()=>typeTerminal(index+1),500);
+      }
+    },50);
+  } else {
+    startBtn.style.display="inline-block";
+  }
+}
+
+// запустить терминал
+typeTerminal();
+
+// ===================== ЗАПУСК ВОПРОСОВ =====================
+function startQuestions(){
+document.getElementById("start").classList.remove("active");
+document.getElementById("bgMusic").play();
+document.getElementById("qScreen").classList.add("active");
+showQuestion();
+}
+
+function showQuestion(){
+document.getElementById("qNumber").innerText = questionIndex+1;
+document.getElementById("questionText").innerText = questions[questionIndex].q;
+}
+
+function answer(user){
+let correctAns = questions[questionIndex].a;
+if(user===correctAns){
+alert("Правильно! Твоя цифра: "+questions[questionIndex].num);
+code += questions[questionIndex].num;
+questionIndex++;
+if(questionIndex<questions.length){ showQuestion(); }
+else{ document.getElementById("qScreen").classList.remove("active"); startMiniGame(); }
+}else{
+alert("Попробуй ещё 😄");
+}
+}
+
+// ===================== МИНИ ИГРА =====================
+function startMiniGame(){
+document.getElementById("gameScreen").classList.add("active");
+const heart = document.getElementById("gameHeart");
+heart.onclick = function(){
+alert("Отлично! Цифра: 7");
+code+="7";
+document.getElementById("gameScreen").classList.remove("active");
+startPuzzle();
+};
+setInterval(()=>{
+heart.style.left = Math.random()*80+"%";
+heart.style.top = Math.random()*80+"%";
+},800);
+}
+
+// ===================== ГОЛОВОЛОМКА =====================
+function startPuzzle(){
+document.getElementById("puzzleScreen").classList.add("active");
+document.getElementById("puzzleText").innerText = puzzles[0].hint;
+}
+function checkPuzzle(){
+let answer = document.getElementById("puzzleInput").value.toLowerCase();
+if(answer===puzzles[0].word){
+alert("Правильно! Цифра: "+puzzles[0].num);
+code+=puzzles[0].num;
+document.getElementById("puzzleScreen").classList.remove("active");
+document.getElementById("codeScreen").classList.add("active");
+}else{ alert("Попробуй ещё!"); }
+}
+
+// ===================== ПРОВЕРКА КОДА =====================
+function checkCode(){
+let user = document.getElementById("finalCode").value;
+if(user===code){
+document.getElementById("codeScreen").classList.remove("active");
+document.getElementById("finalScreen").classList.add("active");
+startHeartsAndFlowers();
+}else{ alert("Неверный код 😄"); }
+}
+
+// ===================== ПАДАЮЩИЕ ЦВЕТЫ И СЕРДЦА =====================
+function startHeartsAndFlowers(){
+setInterval(()=>{
+const f = document.createElement("div");
+f.className="flower";
+f.innerHTML="🌸";
+f.style.left=Math.random()*100+"vw";
+f.style.fontSize=(20+Math.random()*20)+"px";
+document.body.appendChild(f);
+let dur = 4000+Math.random()*2000;
+f.style.transition=`transform ${dur}ms linear, opacity ${dur}ms linear`;
+setTimeout(()=>{f.style.transform="translateY(100vh)"; f.style.opacity=0; },10);
+setTimeout(()=>f.remove(),dur+50);
+},300);
+
+setInterval(()=>{
+const h = document.createElement("div");
+h.className="heart";
+h.innerHTML="❤️";
+h.style.left=Math.random()*100+"vw";
+h.style.fontSize=(20+Math.random()*20)+"px";
+document.body.appendChild(h);
+let dur = 5000+Math.random()*2000;
+h.style.transition=`transform ${dur}ms linear, opacity ${dur}ms linear`;
+setTimeout(()=>{h.style.transform="translateY(100vh)"; h.style.opacity=0; },10);
+setTimeout(()=>h.remove(),dur+50);
+},500);
+}
+</script>
+</body>
+</html>
