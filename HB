@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>С днём рождения! 💜</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff}
+body{
+  overflow-x:hidden;
+  background:
+    radial-gradient(circle at 20% 15%,rgba(180,110,255,.28),transparent 28%),
+    radial-gradient(circle at 80% 80%,rgba(255,100,190,.22),transparent 30%),
+    linear-gradient(145deg,#10051f,#241044 50%,#12051f);
+}
+#stars{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.star{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;opacity:.65;animation:twinkle 2s infinite alternate}
+@keyframes twinkle{to{opacity:.15;transform:scale(.55)}}
+.wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px 18px}
+.card{
+  width:min(620px,100%);min-height:650px;padding:38px 25px 34px;
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  border:1px solid rgba(255,255,255,.18);border-radius:34px;
+  background:rgba(255,255,255,.09);backdrop-filter:blur(18px);
+  box-shadow:0 25px 80px rgba(0,0,0,.35);position:relative;overflow:hidden
+}
+.card:before{content:"";position:absolute;width:280px;height:280px;border-radius:50%;background:rgba(196,113,255,.16);filter:blur(35px);top:-120px;right:-80px}
+.screen{display:none;width:100%;position:relative;z-index:2;animation:appear .65s ease}
+.screen.active{display:block}
+@keyframes appear{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+.emoji{font-size:62px;margin-bottom:10px;filter:drop-shadow(0 8px 18px rgba(255,150,255,.3))}
+h1{font-size:clamp(34px,9vw,58px);margin:5px 0 14px;line-height:1.02}
+h2{font-size:clamp(28px,7vw,42px);margin:5px 0 16px}
+p{font-size:18px;line-height:1.65;color:rgba(255,255,255,.86);margin:10px auto;max-width:500px}
+.name{color:#e8b6ff;text-shadow:0 0 25px rgba(214,128,255,.55)}
+button{
+  border:1px solid rgba(255,255,255,.28);color:#fff;font-size:15px;font-weight:600;
+  padding:13px 22px;border-radius:14px;background:rgba(255,255,255,.11);
+  cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.18);
+  transition:transform .18s,background .18s,border-color .18s;margin-top:25px;
+  letter-spacing:.1px
+}
+button:hover{transform:translateY(-2px);background:rgba(255,255,255,.17);border-color:rgba(255,255,255,.42)}
+button:active{transform:translateY(0) scale(.98)}
+.small{font-size:14px;color:rgba(255,255,255,.6);margin-top:18px}
+.gift{
+  margin:28px auto 8px;width:180px;height:145px;position:relative;cursor:pointer;
+  animation:float 2.8s ease-in-out infinite
+}
+@keyframes float{50%{transform:translateY(-10px)}}
+.box{position:absolute;bottom:0;left:15px;width:150px;height:100px;border-radius:8px;background:linear-gradient(135deg,#b84cff,#7225b9);box-shadow:0 20px 35px rgba(0,0,0,.25)}
+.lid{position:absolute;top:25px;left:8px;width:164px;height:38px;border-radius:7px;background:linear-gradient(135deg,#d875ff,#9135d3);z-index:3}
+.ribbon-v{position:absolute;left:78px;bottom:0;width:25px;height:138px;background:#ffd4f4;z-index:4}
+.ribbon-h{position:absolute;left:0;top:32px;width:180px;height:17px;background:#ffd4f4;z-index:5}
+.bow{position:absolute;top:0;left:67px;z-index:6;font-size:44px}
+.code{
+  margin:24px auto 8px;padding:18px 16px;border-radius:18px;
+  background:rgba(0,0,0,.24);border:1px dashed rgba(255,255,255,.35);
+  font-size:25px;font-weight:800;letter-spacing:3px;color:#ffd5fa;word-break:break-all
+}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:20}
+.conf{position:absolute;width:8px;height:14px;top:-20px;animation:fall 2.8s linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+.heart{position:fixed;bottom:-30px;font-size:22px;animation:rise 4s linear forwards;pointer-events:none}
+@keyframes rise{to{transform:translateY(-110vh) rotate(20deg);opacity:0}}
+@media(max-width:430px){.card{min-height:600px;padding:30px 20px}.emoji{font-size:52px}p{font-size:16px}.gift{transform:scale(.9)}}
+</style>
+</head>
+<body>
+<div id="stars"></div>
+<div id="confetti"></div>
+
+<div class="wrap">
+  <main class="card">
+
+    <section class="screen active" id="s1">
+      <div class="emoji">🌙</div>
+      <div class="small">Для одной особенной именинницы</div>
+      <h1>С днём рождения,<br><span class="name">ИМЯ</span>! 💜</h1>
+      <p>Я приготовил для тебя кое-что маленькое, но надеюсь, что оно подарит тебе большую улыбку.</p>
+      <button onclick="next(2)">Продолжить →</button>
+    </section>
+
+    <section class="screen" id="s2">
+      <div class="emoji">☁️</div>
+      <h2>Немного слов для тебя</h2>
+      <p>
+        Желаю тебе побольше счастливых моментов, искренних улыбок
+        и людей рядом, с которыми всегда легко и хорошо.
+      </p>
+      <p>
+        Пусть этот новый год твоей жизни принесёт много ярких
+        воспоминаний, приятных сюрпризов и исполнения желаний.
+      </p>
+      <p>И самое главное — оставайся собой. Ты прекрасна именно такая, какая ты есть. ✨</p>
+      <button onclick="next(3)">Есть ещё кое-что →</button>
+    </section>
+
+    <section class="screen" id="s3">
+      <div class="emoji">✦</div>
+      <h2>У меня есть подарок</h2>
+      <p>Он спрятан прямо здесь.</p>
+      <div class="gift" onclick="openGift()" aria-label="Открыть подарок">
+        <div class="bow">🎀</div>
+        <div class="lid"></div>
+        <div class="ribbon-h"></div>
+        <div class="box"></div>
+        <div class="ribbon-v"></div>
+      </div>
+      <div class="small">Нажми на подарок 👆</div>
+    </section>
+
+    <section class="screen" id="s4">
+      <div class="emoji">✧</div>
+      <h2>Твой подарок!</h2>
+      <p>Вот твой промокод. Скопируй его и используй, чтобы получить свой билет на AI and Digital Bridge.</p>
+      <div class="code" id="code">PROMO-1234</div>
+      <button onclick="copyCode()">Скопировать промокод</button>
+      <p class="small" id="copied"></p>
+      <p style="margin-top:28px">С днём рождения ещё раз!<br>Надеюсь, этот маленький сюрприз тебе понравится.</p>
+    </section>
+
+  </main>
+</div>
+
+<script>
+const PROMO = "MWTRTSZE1"; // ← ВСТАВЬ СЮДА СВОЙ ПРОМОКОД
+const NAME = "Айлин";          // ← ВСТАВЬ СЮДА ИМЯ
+
+document.querySelector(".name").textContent = NAME;
+document.getElementById("code").textContent = PROMO;
+
+function next(n){
+  document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+  document.getElementById("s"+n).classList.add("active");
+  if(n===2) hearts();
+}
+function openGift(){
+  next(4);
+  confetti();
+}
+function copyCode(){
+  navigator.clipboard?.writeText(PROMO);
+  document.getElementById("copied").textContent="Код скопирован 💜";
+}
+function confetti(){
+  const c=document.getElementById("confetti");
+  for(let i=0;i<90;i++){
+    const x=document.createElement("div");
+    x.className="conf";
+    x.style.left=Math.random()*100+"vw";
+    x.style.animationDelay=Math.random()*.8+"s";
+    x.style.background=`hsl(${Math.random()*360},90%,75%)`;
+    x.style.transform=`rotate(${Math.random()*360}deg)`;
+    c.appendChild(x);
+    setTimeout(()=>x.remove(),3500);
+  }
+}
+function hearts(){
+  for(let i=0;i<14;i++){
+    const h=document.createElement("div");
+    h.className="heart"; h.textContent=["💜","✨","💖","⭐"][Math.floor(Math.random()*4)];
+    h.style.left=Math.random()*100+"vw";
+    h.style.animationDelay=Math.random()*2+"s";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),5000);
+  }
+}
+for(let i=0;i<75;i++){
+  const s=document.createElement("span"); s.className="star";
+  s.style.left=Math.random()*100+"%"; s.style.top=Math.random()*100+"%";
+  s.style.animationDelay=Math.random()*2+"s";
+  s.style.animationDuration=(1.3+Math.random()*2)+"s";
+  document.getElementById("stars").appendChild(s);
+}
+</script>
+</body>
+</html>
